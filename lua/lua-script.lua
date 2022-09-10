@@ -19,3 +19,8 @@ for _, i in pairs { "", "nore" } do
 		for _, j in pairs({ "n", "v" }) do _G["key" .. i .. "map"](j, ...) end
 	end
 end
+
+-- Auto-commands
+function autocmd(type, match, opts)
+	vim.api.nvim_create_autocmd({ type }, { pattern = match, callback = opts })
+end
