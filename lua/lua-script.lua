@@ -1,19 +1,21 @@
-local keymap = vim.keymap
+-- Base key map functions
+function keymap(mode, lhs, rhs, opts)
+	local options = {}
+	if opts then local options = vim.tbl_extend("force", options, opts) end
+	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+keynoremap = vim.keymap.set
 
-local function map(lhs, rhs, opts)
-	for i,v in pairs({ "n", "v" }) do keymap.set(v, lhs, rhs, opts) end
+-- Modal mappings
+for _, i in pairs { "n", "i", "v", "c", "o" } do
+	for _, j in pairs({ "", "nore" }) do
+		_G[i .. j .. "map"] = function (...) _G["key" .. j .. "map"](i, ...) end
+	end
 end
 
-local function nmap(lhs, rhs, opts)
-	keymap.set("n", lhs, rhs, opts)
+-- Regular map functions
+for _, i in pairs { "", "nore" } do
+	_G[i .. "map"] = function (...)
+		for _, j in pairs({ "n", "v" }) do _G["key" .. i .. "map"](j, ...) end
+	end
 end
-
-local function imap(lhs, rhs, opts)
-	keymap.set("i", lhs, rhs, opts)
-end
-
-local function vmap(lhs, rhs, opts)
-	keymap.set("v", lhs, rhs, opts)
-end
-
-return { map = map, nmap = nmap, imap = imap, vmap = vmap }
