@@ -24,3 +24,8 @@ end
 function autocmd(type, match, opts)
 	vim.api.nvim_create_autocmd({ type }, { pattern = match, callback = opts })
 end
+
+-- Options
+g = vim.g
+o = vim.o
+opt = vim.opt
